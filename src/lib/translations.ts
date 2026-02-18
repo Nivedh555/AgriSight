@@ -2,12 +2,12 @@
 export type Language = 'en' | 'te' | 'hi' | 'kn' | 'ta' | 'mr';
 
 export const languages: { code: Language; label: string; native: string }[] = [
+  { code: 'en', label: 'English', native: 'English' },
   { code: 'te', label: 'Telugu', native: 'తెలుగు' },
   { code: 'hi', label: 'Hindi', native: 'हिन्दी' },
   { code: 'kn', label: 'Kannada', native: 'ಕನ್ನಡ' },
   { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
   { code: 'mr', label: 'Marathi', native: 'मराठी' },
-  { code: 'en', label: 'English', native: 'English' },
 ];
 
 export const translations: Record<Language, Record<string, string>> = {
