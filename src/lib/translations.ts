@@ -1,4 +1,3 @@
-
 export type Language = 'en';
 
 export const languages: { code: Language; label: string; native: string }[] = [
@@ -57,16 +56,16 @@ export const translations: Record<Language, Record<string, string>> = {
     simulationControls: "Simulation Controls",
     simulationExplanation: "Simple Explanation",
     // Buyer Matching
-    findBuyersTitle: "Find Buyers Near You",
-    useMyLocation: "Use My Location",
-    typeStateRegion: "Type State/Region",
+    findBuyersTitle: "🤝 Find Buyers Near You",
+    useMyLocation: "📍 Use My Location",
+    typeStateRegion: "Type state/region",
     quantity: "Quantity",
-    search: "Search",
+    search: "🔍 Search",
     buyerName: "Buyer Name",
     distance: "Distance",
     offeredPrice: "Offered Price",
     quantityNeeded: "Quantity Needed",
-    contact: "Contact",
+    contact: "📞 Contact",
     // Messages
     loading: "Loading...",
     allowLocation: "Allow Location Access",
