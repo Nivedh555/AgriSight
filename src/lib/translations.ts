@@ -40,7 +40,7 @@ export const translations: Record<Language, Record<string, string>> = {
     selectRegion: "Select Region",
     analyzeMarket: "Analyze Market",
     // Policy Simulator
-    policySimulatorTitle: "Trade Policy Simulator",
+    policySimulatorTitle: "📊 Trade Policy Simulator",
     selectCountry: "Select Country",
     india: "India",
     usa: "USA",
@@ -54,6 +54,8 @@ export const translations: Record<Language, Record<string, string>> = {
     farmerIncomeChange: "Farmer Income Change",
     consumerPriceChange: "Consumer Price Change",
     importVolumeChange: "Import Volume Change",
+    simulationControls: "Simulation Controls",
+    simulationExplanation: "Simple Explanation",
     // Buyer Matching
     findBuyersTitle: "Find Buyers Near You",
     useMyLocation: "Use My Location",
