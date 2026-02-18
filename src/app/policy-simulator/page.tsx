@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -15,7 +14,6 @@ const CROPS = ["potato", "apple", "pulses", "tomato", "onion", "broccoli", "ging
 export default function PolicySimulator() {
   const { t } = useLanguage();
   const [tariffChange, setTariffChange] = useState([0]);
-  const [country, setCountry] = useState("india");
   const [crop, setCrop] = useState("potato");
   const [policy, setPolicy] = useState("tariff");
   const [simulated, setSimulated] = useState(false);
@@ -76,34 +74,19 @@ export default function PolicySimulator() {
         </CardHeader>
         <CardContent className="p-0">
           <div className="grid md:grid-cols-2">
-            {/* Input Controls */}
             <div className="p-8 space-y-8 border-r">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground uppercase">{t('selectCountry')}</label>
-                  <Select value={country} onValueChange={setCountry}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="india">{t('india')}</SelectItem>
-                      <SelectItem value="usa">{t('usa')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground uppercase">{t('selectCrop')}</label>
-                  <Select value={crop} onValueChange={setCrop}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CROPS.map(c => (
-                        <SelectItem key={c} value={c}>{t(c)}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-muted-foreground uppercase">{t('selectCrop')}</label>
+                <Select value={crop} onValueChange={setCrop}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CROPS.map(c => (
+                      <SelectItem key={c} value={c}>{t(c)}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
@@ -142,7 +125,6 @@ export default function PolicySimulator() {
               </Button>
             </div>
 
-            {/* Results Display */}
             <div className="p-8 bg-card flex flex-col justify-center">
               {!simulated ? (
                 <div className="text-center space-y-4 opacity-50">

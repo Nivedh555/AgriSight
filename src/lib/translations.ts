@@ -36,13 +36,9 @@ export const translations: Record<Language, Record<string, string>> = {
     store: "Store for Later",
     sellNow: "Sell Now",
     selectCrop: "Select Crop",
-    selectRegion: "Select Region",
     analyzeMarket: "Analyze Market",
     // Policy Simulator
     policySimulatorTitle: "📊 Trade Policy Simulator",
-    selectCountry: "Select Country",
-    india: "India",
-    usa: "USA",
     policyType: "Policy Type",
     tariffReduction: "Tariff Reduction",
     importQuota: "Import Quota",
