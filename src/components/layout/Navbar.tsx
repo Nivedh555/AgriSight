@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sprout, LineChart, ShieldCheck, Handshake, Languages } from "lucide-react";
+import { Sprout, LineChart, ShieldCheck, Handshake, Languages, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
 import { 
@@ -19,6 +19,7 @@ export function Navbar() {
   const { t, setLanguage } = useLanguage();
 
   const navItems = [
+    { name: t('navHome'), href: "/", icon: Home },
     { name: t('navPricePredictor'), href: "/price-predictor", icon: LineChart },
     { name: t('navPolicySimulator'), href: "/policy-simulator", icon: ShieldCheck },
     { name: t('navBuyerMatching'), href: "/buyer-matching", icon: Handshake },

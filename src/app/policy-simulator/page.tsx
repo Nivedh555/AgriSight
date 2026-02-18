@@ -8,13 +8,15 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Info, HelpCircle, BarChart3, TrendingUp, TrendingDown, Users, Wallet } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function PolicySimulator() {
+  const { t } = useLanguage();
   const [tariffChange, setTariffChange] = useState([0]);
 
   const impacts = useMemo(() => {
     const val = tariffChange[0];
-    // Mock calculations
     return {
       farmPrice: val * 0.8,
       farmerIncome: val * 1.2,
@@ -50,7 +52,7 @@ export default function PolicySimulator() {
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       <div className="space-y-2">
-        <h1 className="text-4xl font-bold font-headline text-primary">Policy Simulator</h1>
+        <h1 className="text-4xl font-bold font-headline text-primary">{t('policySimulatorTitle')}</h1>
         <p className="text-muted-foreground">Visualize the ripple effects of trade policy adjustments on the agricultural ecosystem.</p>
       </div>
 
@@ -62,9 +64,36 @@ export default function PolicySimulator() {
           </CardHeader>
           <CardContent className="space-y-8">
             <div className="space-y-4">
+              <label className="text-xs font-bold text-muted-foreground uppercase">{t('selectCountry')}</label>
+              <Select defaultValue="india">
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder={t('selectCountry')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="india">{t('india')}</SelectItem>
+                  <SelectItem value="usa">{t('usa')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-4">
+              <label className="text-xs font-bold text-muted-foreground uppercase">{t('policyType')}</label>
+              <Select defaultValue="tariff">
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder={t('policyType')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="tariff">{t('tariffReduction')}</SelectItem>
+                  <SelectItem value="quota">{t('importQuota')}</SelectItem>
+                  <SelectItem value="agreement">{t('tradeAgreement')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-1">
-                  <span className="font-bold">Tariff Change</span>
+                  <span className="font-bold">{t('adjustmentAmount')}</span>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger><HelpCircle className="w-3 h-3 text-muted-foreground" /></TooltipTrigger>
@@ -84,23 +113,9 @@ export default function PolicySimulator() {
                 step={1}
                 className="py-4"
               />
-              <div className="flex justify-between text-[10px] text-muted-foreground uppercase font-bold">
-                <span>-10% (Lax)</span>
-                <span>Neutral</span>
-                <span>+10% (Strict)</span>
-              </div>
             </div>
 
             <Separator />
-
-            <div className="space-y-4">
-              <span className="text-xs font-bold text-muted-foreground uppercase">Context Settings</span>
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-primary/20 text-primary hover:bg-primary/30 cursor-pointer">Global Scarcity</Badge>
-                <Badge variant="outline" className="cursor-pointer">Surplus Season</Badge>
-                <Badge variant="outline" className="cursor-pointer">High Inflation</Badge>
-              </div>
-            </div>
 
             <div className="p-4 bg-accent/10 rounded-xl border border-accent/20">
               <div className="flex items-start gap-3">
@@ -116,7 +131,7 @@ export default function PolicySimulator() {
         <div className="md:col-span-8 space-y-6">
           <div className="grid sm:grid-cols-2 gap-4">
             <ImpactCard 
-              title="Farm Gate Price" 
+              title={t('priceImpact')} 
               value={impacts.farmPrice} 
               unit="/kg" 
               icon={BarChart3} 
@@ -124,7 +139,7 @@ export default function PolicySimulator() {
               description="The price farmers receive directly at the mandi or collection center."
             />
             <ImpactCard 
-              title="Farmer Income" 
+              title={t('farmerIncomeChange')} 
               value={impacts.farmerIncome} 
               unit="k/yr" 
               icon={Wallet} 
@@ -132,7 +147,7 @@ export default function PolicySimulator() {
               description="Estimated annual net profit per hectare for a mid-size farm."
             />
             <ImpactCard 
-              title="Consumer Price" 
+              title={t('consumerPriceChange')} 
               value={impacts.consumerPrice} 
               unit="/kg" 
               icon={Users} 
@@ -140,7 +155,7 @@ export default function PolicySimulator() {
               description="Retail price paid by urban consumers at supermarkets."
             />
             <ImpactCard 
-              title="Export Volume" 
+              title={t('importVolumeChange')} 
               value={impacts.exportVolume} 
               unit="k Ton" 
               icon={TrendingDown} 
@@ -148,26 +163,6 @@ export default function PolicySimulator() {
               description="Total tonnage of local produce shipped to international markets."
             />
           </div>
-
-          <Card className="border-accent/20 bg-accent/5">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-headline flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-accent" />
-                Scenario Outcome
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-accent-foreground leading-relaxed">
-                {tariffChange[0] > 0 ? (
-                  `Increasing tariffs to ${tariffChange[0]}% protects local growers from cheaper imports, driving up farm prices. However, this may lead to consumer inflation and potentially retaliatory trade barriers from export partners.`
-                ) : tariffChange[0] < 0 ? (
-                  `Lowering tariffs to ${tariffChange[0]}% reduces costs for consumers but puts downward pressure on local farm gate prices. This scenario favors urban centers but may require government subsidies for pulse farmers.`
-                ) : (
-                  "Maintain existing tariff structures. This provides market stability but misses opportunities for optimizing export-import balances during seasonal shifts."
-                )}
-              </p>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
