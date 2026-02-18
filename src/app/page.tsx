@@ -1,13 +1,18 @@
 
+"use client";
+
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { LineChart, ShieldCheck, Handshake, ArrowRight, TrendingUp, Users, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Home() {
+  const { t } = useLanguage();
+
   const features = [
     {
-      title: "Price Predictor",
+      title: t('navPricePredictor'),
       description: "AI-powered LSTM models for accurate crop price forecasting.",
       icon: LineChart,
       href: "/price-predictor",
@@ -15,7 +20,7 @@ export default function Home() {
       stats: "94% Accuracy"
     },
     {
-      title: "Policy Simulator",
+      title: t('navPolicySimulator'),
       description: "Simulate trade deals and tariff impacts on agricultural markets.",
       icon: ShieldCheck,
       href: "/policy-simulator",
@@ -23,7 +28,7 @@ export default function Home() {
       stats: "15+ Scenarios"
     },
     {
-      title: "Buyer Matching",
+      title: t('navBuyerMatching'),
       description: "Connect directly with verified buyers near your location.",
       icon: Handshake,
       href: "/buyer-matching",
@@ -38,18 +43,17 @@ export default function Home() {
       <section className="relative overflow-hidden rounded-3xl bg-primary/10 p-8 md:p-16 border border-primary/20">
         <div className="max-w-2xl relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-primary mb-6 font-headline">
-            Empowering Agriculture with <span className="text-accent">Data Intelligence</span>
+            {t('heroTitle').split(' ').slice(0, -2).join(' ')} <span className="text-accent">{t('heroTitle').split(' ').slice(-2).join(' ')}</span>
           </h1>
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-            AgriSight provides farmers and policymakers with the tools to predict market trends, 
-            simulate policy impacts, and bridge the gap between production and commerce.
+            {t('heroSubtitle')}
           </p>
           <div className="flex flex-wrap gap-4">
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-white rounded-full px-8">
-              <Link href="/price-predictor">Get Started</Link>
+              <Link href="/price-predictor">{t('getStarted')}</Link>
             </Button>
             <Button variant="outline" size="lg" className="rounded-full px-8 bg-white/50 border-primary/30">
-              Watch Demo
+              {t('watchDemo')}
             </Button>
           </div>
         </div>
