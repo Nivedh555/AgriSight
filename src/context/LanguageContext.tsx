@@ -16,9 +16,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language | null>(null);
 
   useEffect(() => {
+    // Client-side only initialization
     const savedLang = localStorage.getItem('agrisight_language') as Language;
     if (savedLang && translations[savedLang]) {
       setLanguageState(savedLang);
+    } else {
+      // Clear potentially invalid data
+      localStorage.removeItem('agrisight_language');
+      setLanguageState(null);
     }
   }, []);
 
@@ -28,8 +33,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   const t = (key: string): string => {
-    if (!language) return translations['en'][key] || key;
-    return translations[language][key] || translations['en'][key] || key;
+    // Fallback logic for translations
+    const activeLang = language || 'en';
+    const dict = translations[activeLang] || translations['en'];
+    return dict[key] || translations['en'][key] || key;
   };
 
   return (

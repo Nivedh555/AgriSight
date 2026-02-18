@@ -4,10 +4,21 @@
 import { useLanguage } from '@/context/LanguageContext';
 import { languages } from '@/lib/translations';
 import { Sprout } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export function LanguageModal() {
   const { language, setLanguage } = useLanguage();
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    // Ensure we are on the client before deciding to show/hide
+    setMounted(true);
+  }, []);
+
+  // Avoid hydration mismatch by not rendering anything on server
+  if (!mounted) return null;
+
+  // Only show the modal if no language is currently set in state
   if (language !== null) return null;
 
   return (
