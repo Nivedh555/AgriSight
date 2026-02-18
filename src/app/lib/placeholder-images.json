@@ -1,0 +1,29 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "potato-crop",
+      "description": "A pile of freshly harvested potatoes",
+      "imageUrl": "https://picsum.photos/seed/potato/600/400",
+      "imageHint": "potatoes agriculture"
+    },
+    {
+      "id": "apple-orchard",
+      "description": "Red apples hanging on a tree in an orchard",
+      "imageUrl": "https://picsum.photos/seed/apple/600/400",
+      "imageHint": "apple orchard"
+    },
+    {
+      "id": "pulses-beans",
+      "description": "Various types of dried pulses and beans",
+      "imageUrl": "https://picsum.photos/seed/pulses/600/400",
+      "imageHint": "pulses beans"
+    },
+    {
+      "id": "buyer-warehouse",
+      "description": "A modern agricultural warehouse for logistics",
+      "imageUrl": "https://picsum.photos/seed/warehouse/600/400",
+      "imageHint": "warehouse agriculture"
+    }
+  ]
+}
