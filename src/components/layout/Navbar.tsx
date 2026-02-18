@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sprout, LineChart, ShieldCheck, Handshake, Home, UserCircle } from "lucide-react";
+import { Sprout, LineChart, ShieldCheck, Handshake, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -48,12 +48,7 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="hidden sm:flex items-center gap-2 text-sm font-bold bg-primary text-white px-6 py-3 rounded-full hover:bg-primary/90 transition-all shadow-md active:scale-95 min-h-[48px]">
-            <UserCircle className="w-5 h-5" />
-            {t('login')}
-          </button>
-          
-          {/* Mobile Menu Icon would go here - for now keeping it simple */}
+          {/* Login button removed as requested */}
         </div>
       </div>
     </nav>
