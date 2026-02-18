@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -8,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { MapPin, Search, Phone, Star, TrendingUp, DollarSign, Package, CheckCircle2, Minus, Plus, Navigation } from "lucide-react";
+import { MapPin, Search, TrendingUp, CheckCircle2, Minus, Plus, Navigation } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
+import { formatCurrency } from "@/lib/utils";
 
 const CROPS = ["potato", "apple", "pulses", "tomato", "onion", "broccoli", "ginger", "greenChillies", "brinjal"] as const;
 
@@ -41,7 +41,6 @@ export default function BuyerMatching() {
     e.preventDefault();
     setSearching(true);
     setTimeout(() => {
-      // Simulate a search by shuffling or slightly modifying prices
       const updated = [...INITIAL_BUYERS].sort((a, b) => a.distance - b.distance);
       setResults(updated);
       setSearching(false);
@@ -219,7 +218,7 @@ export default function BuyerMatching() {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <span className={buyer.offeredPrice === bestPrice ? "font-bold text-green-600" : "font-medium"}>
-                          ₹{buyer.offeredPrice.toLocaleString()}
+                          {formatCurrency(buyer.offeredPrice)}
                         </span>
                         {buyer.offeredPrice === bestPrice && (
                           <Badge className="bg-green-100 text-green-700 border-green-200">BEST PRICE</Badge>

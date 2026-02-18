@@ -6,11 +6,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as ChartTooltip, ResponsiveContainer, BarChart, Bar, Legend } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as ChartTooltip, ResponsiveContainer } from "recharts";
 import { TrendingUp, Info, ShoppingCart, Archive, Loader2, Share2, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useLanguage } from "@/context/LanguageContext";
+import { formatCurrency } from "@/lib/utils";
 
 const CROPS = ["potato", "apple", "pulses", "tomato", "onion", "broccoli", "ginger", "greenChillies", "brinjal"] as const;
 
@@ -22,6 +23,7 @@ export default function PricePredictor() {
 
   const handlePredict = async () => {
     setLoading(true);
+    // Simulate thinking time
     await new Promise(resolve => setTimeout(resolve, 1500));
     try {
       const cropInput = ["potato", "apple", "pulses"].includes(crop) ? crop as any : "potato";
@@ -32,10 +34,6 @@ export default function PricePredictor() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatPrice = (price: number) => {
-    return <span className="text-2xl font-bold text-primary">₹{price.toLocaleString('en-IN')}</span>;
   };
 
   const trendData = useMemo(() => {
@@ -50,7 +48,7 @@ export default function PricePredictor() {
 
   const handleShare = () => {
     if (result) {
-      const text = `AgriSight Prediction for ${crop}: Current ₹${result.currentPrice.toLocaleString('en-IN')}. Recommendation: ${result.recommendation}. Check it out!`;
+      const text = `AgriSight Prediction for ${crop}: Current ${formatCurrency(result.currentPrice)}. Recommendation: ${result.recommendation}. Check it out!`;
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
   };
@@ -117,7 +115,7 @@ export default function PricePredictor() {
                   <CardTitle className="text-2xl font-headline flex items-center gap-2">
                     {t('forecast')}: {t(crop)}
                   </CardTitle>
-                  <CardDescription className="text-base font-medium">Price Trends per Quintal (₹)</CardDescription>
+                  <CardDescription className="text-base font-medium">Price Trends per Quintal</CardDescription>
                 </div>
                 <Button variant="outline" size="sm" onClick={handleShare} className="rounded-full h-10 border-primary text-primary hover:bg-primary/10">
                   <Share2 className="w-4 h-4 mr-2" />
@@ -131,9 +129,9 @@ export default function PricePredictor() {
                   <LineChart data={trendData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 13}} dy={10} />
-                    <YAxis axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 13}} dx={-10} />
+                    <YAxis axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 13}} dx={-10} tickFormatter={(val) => `₹${val.toLocaleString('en-IN')}`} />
                     <ChartTooltip 
-                      formatter={(value: number) => [`₹${value.toLocaleString('en-IN')}`, 'Price']}
+                      formatter={(value: number) => [formatCurrency(value), 'Price']}
                       contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
                     />
                     <Line 
@@ -173,7 +171,7 @@ export default function PricePredictor() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white p-6 rounded-[2rem] border shadow-sm text-center">
                 <span className="text-xs font-bold text-muted-foreground uppercase block mb-2">{t('currentPrice')}</span>
-                {formatPrice(result.currentPrice)}
+                <span className="text-2xl font-bold text-primary">{formatCurrency(result.currentPrice)}</span>
               </div>
               <div className="bg-white p-6 rounded-[2rem] border shadow-sm text-center">
                 <span className="text-xs font-bold text-muted-foreground uppercase block mb-2">Confidence</span>
