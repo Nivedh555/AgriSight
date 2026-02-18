@@ -7,54 +7,54 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { MapPin, Search, TrendingUp, CheckCircle2, Minus, Plus, Navigation } from "lucide-react";
+import { MapPin, Search, TrendingUp, CheckCircle2, Minus, Plus, Navigation, Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
+import { searchBuyers, SearchBuyersOutput } from "@/ai/flows/search-buyers";
 
 const CROPS = ["potato", "apple", "pulses", "tomato", "onion", "broccoli", "ginger", "greenChillies", "brinjal"] as const;
-
-interface Buyer {
-  id: number;
-  name: string;
-  distance: number;
-  offeredPrice: number;
-  quantityNeeded: string;
-}
-
-const INITIAL_BUYERS: Buyer[] = [
-  { id: 1, name: "Local Mandi", distance: 5, offeredPrice: 2150, quantityNeeded: "500 kg" },
-  { id: 2, name: "Processor Co.", distance: 12, offeredPrice: 2100, quantityNeeded: "1000 kg" },
-  { id: 3, name: "Exporter", distance: 25, offeredPrice: 2200, quantityNeeded: "2000 kg" },
-  { id: 4, name: "Cooperative", distance: 8, offeredPrice: 2120, quantityNeeded: "750 kg" },
-];
 
 export default function BuyerMatching() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [searching, setSearching] = useState(false);
   const [quantity, setQuantity] = useState(100);
-  const [results, setResults] = useState<Buyer[]>(INITIAL_BUYERS);
+  const [crop, setCrop] = useState<string>("potato");
+  const [locationText, setLocationText] = useState("");
+  const [results, setResults] = useState<any[]>([]);
   const [locationLoading, setLocationLoading] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setSearching(true);
-    setTimeout(() => {
-      const updated = [...INITIAL_BUYERS].sort((a, b) => a.distance - b.distance);
-      setResults(updated);
+    try {
+      const data = await searchBuyers({
+        crop,
+        location: locationText,
+        quantity
+      });
+      setResults(data.buyers);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Search Failed",
+        description: "Could not connect to the buyer network.",
+      });
+    } finally {
       setSearching(false);
-    }, 800);
+    }
   };
 
   const handleUseLocation = () => {
     setLocationLoading(true);
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
-        () => {
+        (position) => {
+          setLocationText(`${position.coords.latitude.toFixed(2)}, ${position.coords.longitude.toFixed(2)}`);
           toast({
             title: "Location Updated",
-            description: "Showing buyers near your current coordinates.",
+            description: "Using current coordinates for search.",
           });
           setLocationLoading(false);
         },
@@ -85,6 +85,7 @@ export default function BuyerMatching() {
   };
 
   const bestPrice = useMemo(() => {
+    if (results.length === 0) return 0;
     return Math.max(...results.map(b => b.offeredPrice));
   }, [results]);
 
@@ -109,7 +110,7 @@ export default function BuyerMatching() {
             <div className="grid md:grid-cols-4 gap-6">
               <div className="space-y-2">
                 <label className="text-xs font-bold text-muted-foreground uppercase">{t('selectCrop')}</label>
-                <Select defaultValue="potato">
+                <Select value={crop} onValueChange={setCrop}>
                   <SelectTrigger className="bg-background">
                     <SelectValue />
                   </SelectTrigger>
@@ -168,13 +169,18 @@ export default function BuyerMatching() {
                 </div>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="e.g., Telangana, Punjab..." className="pl-9 bg-background" />
+                  <Input 
+                    placeholder="e.g., Telangana, Punjab..." 
+                    className="pl-9 bg-background" 
+                    value={locationText}
+                    onChange={(e) => setLocationText(e.target.value)}
+                  />
                 </div>
               </div>
             </div>
 
             <Button type="submit" size="lg" className="w-full bg-accent hover:bg-accent/90 shadow-md transition-all active:scale-[0.98]" disabled={searching}>
-              <Search className="w-4 h-4 mr-2" />
+              {searching ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Search className="w-4 h-4 mr-2" />}
               {searching ? t('loading') : t('search')}
             </Button>
           </form>
@@ -203,13 +209,19 @@ export default function BuyerMatching() {
                     </div>
                   </TableCell>
                 </TableRow>
+              ) : results.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="h-32 text-center text-muted-foreground">
+                    Perform a search to see verified buyers.
+                  </TableCell>
+                </TableRow>
               ) : (
                 sortedResults.map((buyer) => (
                   <TableRow key={buyer.id} className="group hover:bg-primary/5 transition-colors">
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
                         {buyer.name}
-                        {buyer.distance <= 10 && (
+                        {buyer.isHyperLocal && (
                           <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-[10px] px-1.5 py-0 h-4">Hyper-Local</Badge>
                         )}
                       </div>

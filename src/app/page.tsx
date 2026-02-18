@@ -1,14 +1,31 @@
-
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { LineChart, ShieldCheck, Handshake, ArrowRight, TrendingUp, Users, Globe } from "lucide-react";
+import { LineChart, ShieldCheck, Handshake, ArrowRight, TrendingUp, Users, Globe, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
+import { getMarketStats, MarketStatsOutput } from "@/ai/flows/get-market-stats";
 
 export default function Home() {
   const { t } = useLanguage();
+  const [stats, setStats] = useState<MarketStatsOutput | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const data = await getMarketStats();
+        setStats(data);
+      } catch (error) {
+        console.error("Failed to fetch market stats", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStats();
+  }, []);
 
   const features = [
     {
@@ -95,22 +112,30 @@ export default function Home() {
             <p className="text-muted-foreground">Aggregated real-time data from major mandi hubs.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
-            <div className="p-4 bg-background rounded-xl border flex flex-col items-center">
-              <span className="text-accent font-bold text-xl">$12.4B</span>
-              <span className="text-xs text-muted-foreground">Trade Volume</span>
-            </div>
-            <div className="p-4 bg-background rounded-xl border flex flex-col items-center">
-              <span className="text-green-600 font-bold text-xl">+4.2%</span>
-              <span className="text-xs text-muted-foreground">Potato Trend</span>
-            </div>
-            <div className="p-4 bg-background rounded-xl border flex flex-col items-center">
-              <span className="text-orange-600 font-bold text-xl">-1.8%</span>
-              <span className="text-xs text-muted-foreground">Apple Demand</span>
-            </div>
-            <div className="p-4 bg-background rounded-xl border flex flex-col items-center">
-              <span className="text-blue-600 font-bold text-xl">Stable</span>
-              <span className="text-xs text-muted-foreground">Pulse Market</span>
-            </div>
+            {loading ? (
+              <div className="col-span-4 flex justify-center py-4">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <>
+                <div className="p-4 bg-background rounded-xl border flex flex-col items-center">
+                  <span className="text-accent font-bold text-xl">{stats?.tradeVolume}</span>
+                  <span className="text-xs text-muted-foreground">Trade Volume</span>
+                </div>
+                <div className="p-4 bg-background rounded-xl border flex flex-col items-center">
+                  <span className="text-green-600 font-bold text-xl">{stats?.potatoTrend}</span>
+                  <span className="text-xs text-muted-foreground">Potato Trend</span>
+                </div>
+                <div className="p-4 bg-background rounded-xl border flex flex-col items-center">
+                  <span className="text-orange-600 font-bold text-xl">{stats?.appleTrend}</span>
+                  <span className="text-xs text-muted-foreground">Apple Trend</span>
+                </div>
+                <div className="p-4 bg-background rounded-xl border flex flex-col items-center">
+                  <span className="text-blue-600 font-bold text-xl">{stats?.pulseStatus}</span>
+                  <span className="text-xs text-muted-foreground">Pulse Market</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
