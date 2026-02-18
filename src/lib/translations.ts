@@ -267,7 +267,7 @@ export const translations: Record<Language, Record<string, string>> = {
     navPolicySimulator: "கொள்கை",
     navBuyerMatching: "வாங்குபவர்கள்",
     heroTitle: "தரவு நுண்ணறிவுடன் விவசாயத்தை மேம்படுத்துதல்",
-    heroSubtitle: "அக்ரிசைட் விவசாயிகளுக்கு சந்தை போக்குகளைக் கணிக்க கருவிகளை வழங்குகிறது.",
+    heroSubtitle: "அக்ரிசைட் விவசாயிகளுக்கு சந்தை போக்குகளைக் கணிக்கும் கருவிகளை வழங்குகிறது.",
     getStarted: "தொடங்குங்கள்",
     watchDemo: "டெமோ பார்க்கவும்",
     login: "விவசாயி உள்நுழைவு",
