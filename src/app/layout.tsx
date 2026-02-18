@@ -1,10 +1,8 @@
-
 import type {Metadata} from 'next';
 import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 import { LanguageProvider } from '@/context/LanguageContext';
-import { LanguageModal } from '@/components/LanguageModal';
 
 export const metadata: Metadata = {
   title: 'AgriSight | Farmers Market Intelligence',
@@ -13,9 +11,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <head>
@@ -25,7 +23,6 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen">
         <LanguageProvider>
-          <LanguageModal />
           <Navbar />
           <main className="container mx-auto px-4 py-8">
             {children}

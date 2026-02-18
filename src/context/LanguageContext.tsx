@@ -1,11 +1,11 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext } from 'react';
 import { Language, translations } from '@/lib/translations';
 
 interface LanguageContextType {
-  language: Language | null;
+  language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
 }
@@ -13,30 +13,16 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language | null>(null);
-
-  useEffect(() => {
-    // Client-side only initialization
-    const savedLang = localStorage.getItem('agrisight_language') as Language;
-    if (savedLang && translations[savedLang]) {
-      setLanguageState(savedLang);
-    } else {
-      // Clear potentially invalid data
-      localStorage.removeItem('agrisight_language');
-      setLanguageState(null);
-    }
-  }, []);
+  // Hardcoded to English
+  const language: Language = 'en';
 
   const setLanguage = (lang: Language) => {
-    localStorage.setItem('agrisight_language', lang);
-    setLanguageState(lang);
+    // No-op since only English is supported
   };
 
   const t = (key: string): string => {
-    // Fallback logic for translations
-    const activeLang = language || 'en';
-    const dict = translations[activeLang] || translations['en'];
-    return dict[key] || translations['en'][key] || key;
+    const dict = translations['en'];
+    return dict[key] || key;
   };
 
   return (

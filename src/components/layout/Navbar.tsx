@@ -3,20 +3,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sprout, LineChart, ShieldCheck, Handshake, Languages, Home } from "lucide-react";
+import { Sprout, LineChart, ShieldCheck, Handshake, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
-import { languages } from "@/lib/translations";
 
 export function Navbar() {
   const pathname = usePathname();
-  const { t, setLanguage } = useLanguage();
+  const { t } = useLanguage();
 
   const navItems = [
     { name: t('navHome'), href: "/", icon: Home },
@@ -52,20 +45,6 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="p-2 hover:bg-accent/10 rounded-full text-muted-foreground transition-colors">
-                <Languages className="w-5 h-5" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {languages.map((l) => (
-                <DropdownMenuItem key={l.code} onClick={() => setLanguage(l.code)}>
-                  {l.native} ({l.label})
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
           <button className="text-sm font-semibold bg-accent text-accent-foreground px-4 py-2 rounded-full hover:bg-accent/90 transition-all shadow-sm">
             {t('login')}
           </button>
